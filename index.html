@@ -15,14 +15,20 @@
     .smooth-transition {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    /* Hide scrollbar for Chrome, Safari and Opera */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
-    /* Hide scrollbar for IE, Edge and Firefox */
     .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Simple fade-in for the whole app */
+    #root {
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 <script type="importmap">
@@ -38,5 +44,7 @@
 </head>
 <body>
   <div id="root"></div>
+  <!-- CRITICAL: The script tag below is required to start the app -->
+  <script type="module" src="./index.tsx"></script>
 </body>
 </html>
