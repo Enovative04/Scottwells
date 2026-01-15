@@ -1,13 +1,11 @@
-
 import React, { useState, useRef } from 'react';
-import { supabase } from '../supabase';
-import { CATEGORIES, CURRENCY } from '../constants';
-import { Category } from '../types';
+import { CATEGORIES, CURRENCY } from '../constants.ts';
+import { Category } from '../types.ts';
 
 interface AddProductModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (newProduct: any) => void;
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSuccess }) => {
@@ -56,7 +54,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSu
     if (file) handleFile(file);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setError(null);
@@ -67,21 +65,17 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSu
       return;
     }
 
-    try {
-      const { error: insertError } = await supabase
-        .from('products')
-        .insert([{
-          name: formData.name,
-          price: parseFloat(formData.price),
-          description: formData.description,
-          image_url: formData.image_url || 'https://via.placeholder.com/600x400?text=No+Image',
-          status: formData.status,
-          tags: formData.tags
-        }]);
+    // Mock successful insertion for static version
+    setTimeout(() => {
+      const newProduct = {
+        id: Math.random().toString(36).substr(2, 9),
+        ...formData,
+        price: parseFloat(formData.price),
+        image_url: formData.image_url || 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&q=80&w=800'
+      };
 
-      if (insertError) throw insertError;
-
-      onSuccess();
+      onSuccess(newProduct);
+      setIsSubmitting(false);
       onClose();
       setFormData({
         name: '',
@@ -91,15 +85,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ isOpen, onClose, onSu
         status: 'Available',
         tags: []
       });
-    } catch (err: any) {
-      if (err.message?.includes('row-level security') || err.code === '42501') {
-        setError('Database Error: Permission denied. You need to enable "Insert" access for public in your Supabase RLS policies.');
-      } else {
-        setError(err.message || 'An error occurred while saving the product.');
-      }
-    } finally {
-      setIsSubmitting(false);
-    }
+    }, 1200);
   };
 
   const toggleTag = (tag: Category) => {

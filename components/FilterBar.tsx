@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { CATEGORIES } from '../constants';
-import { Category } from '../types';
+import { CATEGORIES } from '../constants.ts';
+import { Category } from '../types.ts';
 
 interface FilterBarProps {
   activeFilter: Category;

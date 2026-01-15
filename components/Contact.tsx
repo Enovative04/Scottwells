@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { WHATSAPP_NUMBER } from '../constants';
+import { WHATSAPP_NUMBER } from '../constants.ts';
 
 const Contact: React.FC = () => {
   const handleWhatsAppClick = () => {
